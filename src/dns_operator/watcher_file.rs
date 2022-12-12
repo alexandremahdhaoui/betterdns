@@ -4,7 +4,7 @@ use std::sync::mpsc::{channel, Receiver};
 use notify::EventKind::Modify;
 
 const DNS_MANIFEST_PATH: &str = "./dns_manifest";
-const COREFILE_PATH: &str = "./corefile";
+const COREFILE_PATH: &str = "Corefile";
 
 
 
