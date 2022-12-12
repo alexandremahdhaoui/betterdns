@@ -75,10 +75,12 @@ pub(crate) struct Manifest {
 
 impl Manifest {
     fn from_str(s: &str) -> Result<Self, String> {
+        let s = clean_str(s);
         let lines: Vec<&str> = s.split("\n").collect();
 
         // Parses Origin
-        let origin = OriginRecord::from_str(lines[0]);
+        let origin = OriginRecord::from_str(lines[0])?;
+
         // Parses ttl
         let ttl = TTLRecord::from_str(lines[1]);
 
@@ -88,10 +90,15 @@ impl Manifest {
             Ok(rec) => {
                 match rec {
                     RecordData::SOA(r) => soa = r,
-                    _ => return Err("expected SOA".to_string())
+                    RecordData::A(r) => {
+                        return Err(format!("expected SOA, received A: {}", r.to_string()))
+                    }
+                    RecordData::NS(r) => {
+                        return Err(format!("expected SOA, received NS: {}", r.to_string()))
+                    }
                 }
             }
-            Err(_) => return Err("expected SOA".to_string())
+            Err(e) => return Err(format!("expected SOA; {}", e))
         }
 
         // Parses records from other lines
@@ -141,8 +148,8 @@ impl Manifest {
 impl Display for Manifest {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let mut v = vec!(
-            self.ttl.to_string(),
             self.origin.to_string(),
+            self.ttl.to_string(),
             self.soa.to_string(),
         );
 
@@ -156,4 +163,8 @@ impl Display for Manifest {
 
         write!(f, "{}", s)
     }
+}
+
+fn clean_str(s: &str) -> String {
+    s.replace("\t", " ")
 }

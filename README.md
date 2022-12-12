@@ -11,7 +11,7 @@ Issues:
   - Try to terminate non-healthy vms/containers.
   - Then unregister them from the DNS.
 
-# Repository structure
+## Repository structure
 
 | Path                      | Description                    |
 |---------------------------|--------------------------------|
@@ -19,23 +19,10 @@ Issues:
 | `src/server`              | REST API server.               |
 | `src/dns_zonefile_parser` | Parser for dns zonefile.       |
 
-# TODO: Next steps
-- [ ] Persistence: implement function to save the `dnsfile`.
-- [ ] Putting it all together: have both the `coredns` thread & server running.
-- [ ] Add a REST Endpoint to query the whole `dns` manifest.
-- [ ] Use strategy for the DNS controller. Indeed `file_watcher` is an observer pattern which allows us to perform different
-commands on the dns server.
-  - Therefor, we can "outsource" these behaviors to different strategies.
-  - `file_watcher` is just one example of a strategy that allows the controller to perform commands on the dns server.
-  - Restarting the dsn server is one command that can be executed by the controller. But it shouldn't be tightly coupled
-  to the controller.
-  - This will allow us to more easily test our application & better  
-- [ ] Also provide a bridge (or interface) to easily plug any kind of DNS server to the controller.
-  - User Bridge pattern to enable using different DNS servers rather than just the coredns binary. E.g. we could
-    implement our own dns server in rust. 
+## TODO: Next steps
 - [ ] Write tests.
 
-# Getting started
+## Getting started
 
 This binary will create a REST API server to {create,read,update,delete} records for the nameserver.
 
@@ -55,8 +42,15 @@ At the beginning we will use this as a monorepo. And will contain other business
   - https://docs.rs/notify/4.0.15/notify/enum.DebouncedEvent.html 
 - When change happen, restart `coredns` process.
 
+## Installation
 
-# Considerations
+```shell
+git clone https://gitlab.com/alexandre.mahdhaoui/betterdns && cd betterdns
+cargo build --release
+target/release/betterdns
+```
+
+## Considerations
 
 We will have a problem when we will try to authenticate/authorize clients.
-Indeed, we'll maybe try to use JWT tokens to authenticate new VM/container trying to register to the DNS. 
+Indeed, we'll maybe try to use JWT tokens to authenticate new VM/container trying to register to the DNS.

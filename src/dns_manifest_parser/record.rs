@@ -4,12 +4,16 @@ use regex::Regex;
 use rocket::serde::{Deserialize, Serialize};
 use rocket::serde::json::Json;
 
+const TTL: &str = "$TTL";
+const ORIGIN: &str = "$ORIGIN";
+
 // RecordType
 pub(crate) const A: &str = "A";
 pub(crate) const NS: &str = "NS";
 pub(crate) const SOA: &str = "SOA";
 
 // SOA default values
+const DEFAULT_TTL: u32 = 3600;
 const DEFAULT_REFRESH: u32 = 7200;
 const DEFAULT_RETRY: u32 = 3600;
 const DEFAULT_EXPIRE: u32 = 604800;
@@ -228,7 +232,7 @@ impl Display for Record {
 
 // ----------------------------------------- OriginRecord ------------------------------------------
 
-const ORIGIN: &str = "$ORIGIN ";
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -237,20 +241,31 @@ pub(crate) struct OriginRecord {
 }
 
 impl OriginRecord {
-    pub(crate) fn from_str(s: &str) -> Self { Self{ origin: s.to_string() } }
+    pub(crate) fn from_str(s: &str) -> Result<Self, String> {
+        let origin = parse_origin(s)?;
+        Ok(Self{origin})
+    }
+
     pub(crate) fn new() -> Self {Self{ origin: "example.com".to_string() }}
+}
+
+fn parse_origin(s: &str) -> Result<String, String> {
+    if s.to_string().contains(ORIGIN) {
+        let s = s.replace(ORIGIN, "");
+        return Ok(s.replace(" ", ""))
+    }
+    Err("zonefile should contain ORIGIN".to_string())
 }
 
 impl Display for OriginRecord {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}{}", ORIGIN, self.origin)
+        write!(f, "{} {}", ORIGIN, self.origin)
     }
 }
 
 // ------------------------------------------- TTLRecord -------------------------------------------
 
-const TTL: &str = "$TTL ";
-const DEFAULT_TTL: u32 = 3600;
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
@@ -271,7 +286,7 @@ impl TTLRecord {
 
 impl Display for TTLRecord {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}{}", TTL, self.ttl)
+        write!(f, "{} {}", TTL, self.ttl)
     }
 }
 
