@@ -20,6 +20,7 @@ Issues:
 | `src/dns_zonefile_parser` | Parser for dns zonefile.       |
 
 ## TODO: Next steps
+- [x] listen on addr `0.0.0.0` instead of `127.0.0.1`.
 - [ ] Write tests.
 
 ## Getting started
@@ -49,6 +50,9 @@ git clone https://gitlab.com/alexandre.mahdhaoui/betterdns && cd betterdns
 cargo build --release
 target/release/betterdns
 ```
+
+If you want to secure your alpine with a firewall:
+- https://wiki.alpinelinux.org/wiki/How-To_Alpine_Wall
 
 ## Considerations
 
