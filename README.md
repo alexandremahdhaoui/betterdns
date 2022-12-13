@@ -16,7 +16,7 @@ Issues:
 | Path                      | Description                                                                                                              |
 |---------------------------|--------------------------------------------------------------------------------------------------------------------------|
 | `src/dns_manifest_parser` | Parser for dns zone manifest.                                                                                            |
-| `src/dns_operator`        | Operator of the dns server.<br/>Highly decoupled into 3 internal services: `controller.rs`, `runtime.rs` & `watcher.rs`. |
+| `src/dns_operator`        | Operator of the dns server. Highly decoupled into 3 internal services:<br/>`controller.rs`, `runtime.rs` & `watcher.rs`. |
 | `src/rest_api`            | REST API server.                                                                                                         |
 
 ## TODO: Next steps
@@ -41,9 +41,9 @@ This binary will create 2 threads:
 ## Installation
 
 ```shell
-git clone https://gitlab.com/alexandre.mahdhaoui/betterdns && cd betterdns
-cargo build --release
-target/release/betterdns
+git clone https://gitlab.com/alexandre.mahdhaoui/betterdns
+mv betterdns "$HOME"
+"$HOME/betterdns/scripts/update.sh"
 ```
 
 Please make sure to have a customized copy of `Corefile`, `dns_manifest` & `Rocket.toml` in the directory that runs `betterdns`.
