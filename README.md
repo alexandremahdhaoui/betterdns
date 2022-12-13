@@ -13,35 +13,30 @@ Issues:
 
 ## Repository structure
 
-| Path                      | Description                    |
-|---------------------------|--------------------------------|
-| `src/dns_controller`      | Controller for the dns server. |
-| `src/server`              | REST API server.               |
-| `src/dns_zonefile_parser` | Parser for dns zonefile.       |
+| Path                      | Description                                                                                                              |
+|---------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `src/dns_manifest_parser` | Parser for dns zone manifest.                                                                                            |
+| `src/dns_operator`        | Operator of the dns server.<br/>Highly decoupled into 3 internal services: `controller.rs`, `runtime.rs` & `watcher.rs`. |
+| `src/rest_api`            | REST API server.                                                                                                         |
 
 ## TODO: Next steps
-- [x] listen on addr `0.0.0.0` instead of `127.0.0.1`.
 - [ ] Write tests.
 
 ## Getting started
 
-This binary will create a REST API server to {create,read,update,delete} records for the nameserver.
+This binary will create 2 threads:
+- One thread serving the REST API to {create,read,update,delete} records of the dns zone manifest.
+- Another one will act as an operator, watching the dns zone manifest for change & updating the nameserver.
+  - The operator is responsible for running the nameserver as a child process.
 
 | Endpoint    | Method | Description                   |
 |-------------|--------|-------------------------------|
+| `/`         | GET    | get the whole `dns` manifest  |
 | `/a`        | GET    | get all `A record`s.          |
 | `/a/<name>` | GET    | get one `A record` by name.   |
 | `/a`        | POST   | create a new `A record`.      |
 | `/a/<name>` | PUT    | update an `A record` by name. |
 | `/a/<name>` | DELETE | delete an` A record` by name. |
-| `/`         | GET    | get the whole `dns` manifest  |
-
-At the beginning we will use this as a monorepo. And will contain other business logic:
-- Spawn a `coredns` process.
-- Listen to change on `dns_file`.
-  - https://docs.rs/notify/latest/notify/
-  - https://docs.rs/notify/4.0.15/notify/enum.DebouncedEvent.html 
-- When change happen, restart `coredns` process.
 
 ## Installation
 
@@ -50,6 +45,8 @@ git clone https://gitlab.com/alexandre.mahdhaoui/betterdns && cd betterdns
 cargo build --release
 target/release/betterdns
 ```
+
+Please make sure to have a customized copy of `Corefile`, `dns_manifest` & `Rocket.toml` in the directory that runs `betterdns`.
 
 If you want to secure your alpine with a firewall:
 - https://wiki.alpinelinux.org/wiki/How-To_Alpine_Wall

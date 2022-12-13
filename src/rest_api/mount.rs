@@ -1,6 +1,6 @@
 use rocket::{Build, Rocket};
-use crate::server::manifest::get;
-use crate::server::a_record::{get_a, get_a_by_name, create_a, update_a, delete_a};
+use crate::rest_api::manifest::get;
+use crate::rest_api::a_record::{get_a, get_a_by_name, create_a, update_a, delete_a};
 
 const A_RECORD_ROUTE: &str = "/a";
 const ROOT: &str = "/";

@@ -1,6 +1,6 @@
 mod dns_manifest_parser;
 mod dns_operator;
-mod server;
+mod rest_api;
 
 #[macro_use] extern crate rocket;
 
@@ -22,5 +22,5 @@ fn rocket() -> _ {
             .run().expect("operator stopped unexpectedly");
     });
 
-    server::mount::mount()
+    rest_api::mount::mount()
 }
