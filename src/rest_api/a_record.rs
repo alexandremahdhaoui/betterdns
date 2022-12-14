@@ -9,7 +9,7 @@ const MANIFEST_PATH: &str = "./dns_manifest";
 
 #[get("/")]
 pub(crate) fn get_a() -> &'static str {
-    "/a"
+    "unimplemented"
 }
 
 #[get("/<name>")]
