@@ -23,31 +23,38 @@ impl ManifestBuilder {
             Ok(manifest) => Ok(Self{ manifest}),
             Err(e) => Err(e)
         }
+    }
 
+    pub(crate) fn get_record_by(&mut self, name: &str, _type: &str) -> Option<(usize, &mut RecordData)> {
+        if let Some(i) = self.manifest.records
+            .iter()
+            .position(|r|{
+                name == r.get_name() && _type == r.get_type()
+            }) {
+            return Some((i, &mut self.manifest.records[i]))
+        }
+        None
     }
 
     pub(crate) fn add_record(&mut self, record: RecordData) -> &mut Self {
-        self.manifest.records.push(record);
+        if let Some((_, matched_record)) = self.get_record_by(record.get_name().as_str(), record.get_type()) {
+            let _ = std::mem::replace(matched_record, record);
+        }
+        else {
+            self.manifest.records.push(record);
+        }
         self
     }
 
-    pub(crate) fn update_record(&mut self, name: &str, rec: RecordData) -> &mut Self {
-        if let Some(i) = self.manifest.records
-            .iter()
-            .position(|r| {
-                name == r.get_name() && r.get_type() == rec.get_type()
-            }) {
-            let _ = std::mem::replace(&mut self.manifest.records[i], rec);
+    pub(crate) fn update_record(&mut self, name: &str, record: RecordData) -> &mut Self {
+        if let Some((_, matched_record)) = self.get_record_by(name, record.get_type()) {
+            let _ = std::mem::replace(matched_record, record);
         }
         self
     }
 
     pub(crate) fn delete_record(&mut self, name: &str, record_type: &str) -> &mut Self {
-        if let Some(i) = self.manifest.records
-            .iter()
-            .position(
-                |r| r.get_name() == name && r.get_type() == record_type
-            ) {
+        if let Some((i, _)) = self.get_record_by(record.get_name().as_str(), record.get_type()) {
             self.manifest.records.remove(i);
         }
         self
