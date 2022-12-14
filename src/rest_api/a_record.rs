@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use std::fs;
 use crate::dns_manifest_parser::record::{Record, RecordData};
 use rocket::serde::{json::Json};
@@ -12,8 +13,13 @@ pub(crate) fn get_a() -> &'static str {
 }
 
 #[get("/<name>")]
-pub(crate) fn get_a_by_name(name: &str) -> String {
-    format!("/a/{}", name)
+pub(crate) fn get_a_by_name(name: &str) -> Result<String, String> {
+    let builder = &mut ManifestBuilder::from_path(MANIFEST_PATH).unwrap();
+    if let Some(record) = builder
+        .get_record_by(name, record::A) {
+        return Ok(record.to_string())
+    }
+    Err("no match found".to_string())
 }
 
 // curl -XPOST 127.0.0.1:8000/a --data '{"name": "yolo.com.", "class": "IN", "record_type": "A", "value": "127.0.0.1"}'
