@@ -1,8 +1,6 @@
-$ORIGIN mahdhaoui.com.
+$ORIGIN alexandre.mahdhaoui.com.
 $TTL 3600
-mahdhaoui.com. IN SOA sns.dns.icann.org. noc.dns.icann.org. 2015082557 7200 3600 1209600 3600
+mahdhaoui.com. IN SOA sns.dns.icann.org. noc.dns.icann.org. 01 7200 3600 1209600 3600
 mahdhaoui.com. IN NS b.iana-servers.net.
 mahdhaoui.com. IN NS a.iana-servers.net.
-test.mahdhaoui.com. IN A 127.0.0.1
-yolo.com. IN A 127.0.0.1
-yolo.com. IN A 127.0.0.1
+dns IN A 10.128.0.2
