@@ -1,4 +1,4 @@
-mahdhaoui.com:53 {
+alexandre.mahdhaoui.com:53 {
     log stdout
     file dns_manifest
 }
