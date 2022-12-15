@@ -1,7 +1,6 @@
-use std::borrow::Borrow;
 use std::fs;
-use crate::dns_manifest_parser::record::{Record, RecordData};
 use rocket::serde::{json::Json};
+use crate::dns_manifest_parser::record::{Record, RecordData};
 use crate::dns_manifest_parser::record;
 use crate::dns_manifest_parser::manifest::ManifestBuilder;
 
@@ -15,7 +14,7 @@ pub(crate) fn get_a() -> &'static str {
 #[get("/<name>")]
 pub(crate) fn get_a_by_name(name: &str) -> Result<String, String> {
     let builder = &mut ManifestBuilder::from_path(MANIFEST_PATH).unwrap();
-    if let Some(record) = builder
+    if let Some((_, record)) = builder
         .get_record_by(name, record::A) {
         return Ok(record.to_string())
     }

@@ -37,7 +37,7 @@ impl ManifestBuilder {
     }
 
     pub(crate) fn add_record(&mut self, record: RecordData) -> &mut Self {
-        if let Some((_, matched_record)) = self.get_record_by(record.get_name().as_str(), record.get_type()) {
+        if let Some((_, matched_record)) = self.get_record_by(&record.get_name(), record.get_type()) {
             let _ = std::mem::replace(matched_record, record);
         }
         else {
@@ -54,7 +54,7 @@ impl ManifestBuilder {
     }
 
     pub(crate) fn delete_record(&mut self, name: &str, record_type: &str) -> &mut Self {
-        if let Some((i, _)) = self.get_record_by(record.get_name().as_str(), record.get_type()) {
+        if let Some((i, _)) = self.get_record_by(name, record_type) {
             self.manifest.records.remove(i);
         }
         self
