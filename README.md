@@ -3,7 +3,7 @@
 We would like to register new vms to the DNS as soon as they're up & running. 
 To randomly assign any IPs to new vms/container or use DHCP.
 
-The goal of this project is to achieve **decentralized server-side service discovery**.
+The goal of this project is to achieve **service discovery**.
 
 Issues: 
 - How do we unregister vms/containers that might shut down in a non-gracefully manner?
